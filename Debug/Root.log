@@ -1,0 +1,4 @@
+﻿  Main.cpp
+c:\users\vlade\onedrive\документы\visual studio 2017\projects\root\root\main.cpp(189): warning C4101: hBrush: неиспользованная локальная переменная
+  Root.vcxproj -> C:\Users\vlade\OneDrive\документы\visual studio 2017\Projects\Root\Debug\Root.exe
+  Root.vcxproj -> C:\Users\vlade\OneDrive\документы\visual studio 2017\Projects\Root\Debug\Root.pdb (Partial PDB)

@@ -14,10 +14,10 @@
 
 typedef struct Node
 {
-	int value;
+	struct tree *value;
 	struct Node *next;
 } Node;
-Node *head;
+Node *head=NULL;
 Node* getLast(Node *head)
 {
 	if (head == NULL)
@@ -30,19 +30,28 @@ Node* getLast(Node *head)
 	}
 	return head;
 }
-void push(Node *head, int value)
+void push(Node **head, struct tree *value)
 {
-	Node *last = getLast(head);
-	Node *tmp = (Node*)malloc(sizeof(Node));
-	tmp->value = value;
-	tmp->next = NULL;
-	last->next = tmp;
+	if (*head == NULL) 
+	{
+		Node *tmp = (Node*)malloc(sizeof(Node));
+		tmp->value = value;
+		tmp->next = (*head);
+		(*head) = tmp;
+	}
+	else
+	{
+		Node *last = getLast(*head);
+		Node *tmp = (Node*)malloc(sizeof(Node));
+		tmp->value = value;
+		tmp->next = NULL;
+		last->next = tmp;
+	}
 }
-
-int pop(Node **head)
+struct tree* pop(Node **head)
 {
 	Node* prev = NULL;
-	int val;
+	tree *val;
 	if (head == NULL)
 	{
 		exit(-1);
@@ -53,8 +62,6 @@ int pop(Node **head)
 	free(prev);
 	return val;
 }
-
-
 
 struct tree {
 	int info;
@@ -88,7 +95,7 @@ struct tree *stree(struct tree *root, struct tree *r, int info)
 	return root;
 }
 
-void preorder(struct tree *root) //В глубь
+void deep(struct tree *root) //В глубь
 {
 	if (!root) return;
 
@@ -97,30 +104,20 @@ void preorder(struct tree *root) //В глубь
 	preorder(root->right);
 } 
 
-void postorder(struct tree *root) //В ширину
-{
-	if (!root) return;
-
-	
-	postorder(root->left);
-	postorder(root->right);
-	if (root->info) printf("%i ", root->info);
-}
-
-void printspisok(struct tree *root)
+void width(struct tree *root)
 {
 	if (!root)
 		return;
-	push(head, root->info);
+	push(&head, root);
 	while (head)
 	{
 		tree *curr=NULL;
-		curr->info = pop(&head);
-		printf("%d", curr->info);
+		curr = pop(&head);
+		printf("%i ", curr->info);
 		if (curr->left)
-			push(head, curr->left->info);
+			push(&head, curr->left);
 		if (curr->right)
-			push(head, curr->right->info);
+			push(&head, curr->right);
 	}
 }
 struct tree *search_tree(struct tree *root, int key)
@@ -183,8 +180,12 @@ struct tree *dtree(struct tree *root, char key)
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	int s, N;
-
+	int s, N, ox=300, oy=300;
+	HWND hWnd = GetDesktopWindow();
+	HDC hDC = GetDC(hWnd);
+	HBRUSH hBrush;
+	SelectObject(hDC, GetStockObject(WHITE_PEN));
+	system("mode con cols=75 lines=50");
 	root = NULL;  /* инициализация корня дерева */
 
 	scanf("%i", &N);
@@ -195,11 +196,10 @@ int main()
 		scanf_s("%i", &s);
 		root = stree(root, root, s);
 	}
-	preorder(root);
+	deep(root);
 	printf("\n");
-	postorder(root);
+	width(root);
 	printf("\n");
-	printspisok(root);
 	system("pause");
 	return 0;
 }
