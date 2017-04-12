@@ -103,6 +103,7 @@ void deep(struct tree *root) //В глубь
 	deep(root->left);
 	deep(root->right);
 } 
+void deeppict(struct tree *root, HDC hDC);
 
 void width(struct tree *root)
 {
@@ -181,10 +182,9 @@ int main()
 {
 	setlocale(LC_ALL, "rus");
 	int s, N, ox=300, oy=300;
-	HWND hWnd = GetDesktopWindow();
-	HDC hDC = GetDC(hWnd);
-	HBRUSH hBrush;
-	SelectObject(hDC, GetStockObject(WHITE_PEN));
+	HDC hDC = GetDC(GetConsoleWindow());
+	HPEN Pen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
+	SelectObject(hDC, Pen);
 	system("mode con cols=75 lines=50");
 	root = NULL;  /* инициализация корня дерева */
 
@@ -200,7 +200,31 @@ int main()
 	printf("\n");
 	width(root);
 	printf("\n");
+	deeppict(root, hDC);
 	system("pause");
 	return 0;
 }
-
+void deeppict(struct tree *root, HDC hDC)
+{
+	int s, mainroot;
+	static int m = 0;
+	if (!root) return;
+	s = root->info;
+	if (m == 0)
+	{
+		mainroot = root->info;
+		Ellipse(hDC, 10 - 2, 15 - 2, 10 + 2, 15 + 2);
+		m++;
+		s = root->info;
+	}
+	if (root->info)
+	{
+		if (((root->info) < s) && (root->info < mainroot))
+		{
+			Ellipse(hDC, 10 - 2, 15 - 2, 10 + 2, 15 + 2);
+		}
+		s = root->info;
+	}
+	deeppict(root->left, hDC);
+	deeppict(root->right, hDC);
+}
