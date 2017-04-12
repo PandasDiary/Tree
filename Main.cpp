@@ -100,8 +100,8 @@ void deep(struct tree *root) //В глубь
 	if (!root) return;
 
 	if (root->info) printf("%i ", root->info);
-	preorder(root->left);
-	preorder(root->right);
+	deep(root->left);
+	deep(root->right);
 } 
 
 void width(struct tree *root)
