@@ -103,7 +103,6 @@ void deep(struct tree *root) //В глубь
 	deep(root->left);
 	deep(root->right);
 } 
-void deeppict(struct tree *root, HDC hDC);
 
 void width(struct tree *root)
 {
@@ -178,53 +177,141 @@ struct tree *dtree(struct tree *root, char key)
 	return root;
 }
 
+void GoToXY(short x, short y)
+{
+	HANDLE StdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD coord = { x, y };
+	SetConsoleCursorPosition(StdOut, coord);
+}
+
+void print(tree * root, short x, short y, short a, char c)
+{
+	if (root)
+	{
+		if (a>0 && c != 'k')
+		{
+			if (c == 'l')
+				x -= 10;
+			else
+				x += 10;
+		}
+		else
+			if (c != 'k')
+				if (c == 'l')
+					x -= 4;
+				else
+					x += 4;
+
+		GoToXY(x, y += 2);
+
+		a--;
+
+		printf("%5d", root->info);
+		print(root->left, x, y, a, 'l');
+		print(root->right, x, y, a, 'r');
+	}
+}
+
+void LEVEL(tree *koren_d, int &i, int &max_level)//считает количество уровней в деревке моём :)(нужно для вывода деревка,чтобы знать на сколько уровней погружаться рекурсией)
+{
+	if (koren_d->left != NULL)
+	{
+		i++;
+		if (max_level < i)
+			max_level = i;
+		LEVEL(koren_d->left, i, max_level);
+		i--;
+	}
+	if (koren_d->right != NULL)
+	{
+		i++;
+		if (max_level < i)
+			max_level = i;
+		LEVEL(koren_d->right, i, max_level);
+		i--;
+	}
+}
+
+void display_level(tree *koren_d, int &i, int level)//выводит уровень № level у деревка :)
+{
+	if (i == level)
+		printf("%d ", koren_d->info);
+	if (koren_d->left != NULL)
+	{
+		i++;
+		display_level(koren_d->left, i, level);
+		i--;
+	}
+	if (koren_d->right != NULL)
+	{
+		i++;
+		display_level(koren_d->right, i, level);
+		i--;
+	}
+}
+
+void display_all(tree *koren)
+{
+	int i = 0;//нужна для сквозной нумерации уровня в рекурсиях.(по крайней мере моя башка не придумала ничего лучше этого костыля)
+	int max_level = 0;
+	LEVEL(koren, i, max_level); //---узнаю максимальный уровень дерева
+	for (int level = 0; level <= max_level; level++) //--цикл поочереди выводит каждый уровень девера, начиная с корняж
+	{
+		if (level == 0)
+			printf("[ Корень ] : ");
+		else
+			printf("[%d уровень] : ", level);
+		display_level(koren, i, level);//--функция вывода 1 уровня  дерева  
+		printf("\n");
+	}
+}
+
+
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	int s, N, ox=300, oy=300;
-	HDC hDC = GetDC(GetConsoleWindow());
-	HPEN Pen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
-	SelectObject(hDC, Pen);
+	int s, N, kol;
 	system("mode con cols=75 lines=50");
 	root = NULL;  /* инициализация корня дерева */
-
-	scanf("%i", &N);
-
-	for (int i = 0; i < N; i++)
+	do
 	{
-		printf("Введите значение: ");
-		scanf_s("%i", &s);
-		root = stree(root, root, s);
-	}
-	deep(root);
-	printf("\n");
-	width(root);
-	printf("\n");
-	deeppict(root, hDC);
-	system("pause");
-	return 0;
-}
-void deeppict(struct tree *root, HDC hDC)
-{
-	int s, mainroot;
-	static int m = 0;
-	if (!root) return;
-	s = root->info;
-	if (m == 0)
-	{
-		mainroot = root->info;
-		Ellipse(hDC, 10 - 2, 15 - 2, 10 + 2, 15 + 2);
-		m++;
-		s = root->info;
-	}
-	if (root->info)
-	{
-		if (((root->info) < s) && (root->info < mainroot))
+		printf("Выберите опцию: ");
+		scanf("%i", &N);
+		switch(N)
 		{
-			Ellipse(hDC, 10 - 2, 15 - 2, 10 + 2, 15 + 2);
+		case 1:
+			printf("Сколько элементов вы хотите добавить? ");
+			scanf("%i", &kol);
+			for (int i = 0; i < kol; i++)
+			{
+				printf("Введите значение: ");
+				scanf_s("%i", &s);
+				root = stree(root, root, s);
+			}
+			break;
+		case 2:
+			system("cls");
+			printf("Дерево в глубину:");
+			deep(root);
+			printf("\n");
+			break;
+		case 3:
+			system("cls");
+			printf("Дерево в ширину:");
+			width(root);
+			printf("\n");
+			break;
+		case 4:
+			system("cls");
+			printf("Дерево по уровням:");
+			display_all(root);
+			break;
+		case 5:
+			system("cls");
+			print(root, 31, 2, 2, 'k');
+			GoToXY(0, 0);
+			break;
 		}
-		s = root->info;
-	}
-	deeppict(root->left, hDC);
-	deeppict(root->right, hDC);
+	}while(N!=6);
+	return 0;
 }
