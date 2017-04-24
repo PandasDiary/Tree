@@ -1,17 +1,11 @@
-//Функция построения дерева
-//Функция поиска в глубину
-//Функция поиска в ширину
-//Функция нахождения какого-либо эл-та
-
-
-/* Эта программа выводит на экран двоичное дерево. */
-#define _CRT_SECURE_NO_WARNINGS
+п»ї#define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <stdio.h>
 #include<locale.h>
 #include<Windows.h>
 #include<iostream>
 
+//РћСЂРіР°РЅРёР·Р°С†РёСЏ РѕС‡РµСЂРµРґРё//
 typedef struct Node
 {
 	struct tree *value;
@@ -62,6 +56,7 @@ struct tree* pop(Node **head)
 	free(prev);
 	return val;
 }
+///////////////////////
 
 struct tree {
 	int info;
@@ -69,19 +64,19 @@ struct tree {
 	struct tree *right;
 }*root;
 
-struct tree *stree(struct tree *root, struct tree *r, int info)
+struct tree *stree(struct tree *root, struct tree *r, int info)  //Р¤СѓРЅРєС†РёСЏ РїРѕСЃС‚СЂРѕРµРЅРёСЏ РґРµСЂРµРІР°
 {
 
 	if (!r) {
 		r = (struct tree *) malloc(sizeof(struct tree));
 		if (!r) {
-			printf("Не хватает памяти\n");
+			printf("РќРµ С…РІР°С‚Р°РµС‚ РїР°РјСЏС‚Рё\n");
 			exit(0);
 		}
 		r->left = NULL;
 		r->right = NULL;
 		r->info = info;
-		if (!root) return r; /* первый вход */
+		if (!root) return r; /* РїРµСЂРІС‹Р№ РІС…РѕРґ */
 		if (info < root->info) root->left = r;
 		else root->right = r;
 		return r;
@@ -95,7 +90,7 @@ struct tree *stree(struct tree *root, struct tree *r, int info)
 	return root;
 }
 
-void deep(struct tree *root) //В глубь
+void deep(struct tree *root) //РћР±С…РѕРґ РґРµСЂРµРІР° РІ РіР»СѓР±РёРЅСѓ
 {
 	if (!root) return;
 
@@ -104,7 +99,7 @@ void deep(struct tree *root) //В глубь
 	deep(root->right);
 } 
 
-void width(struct tree *root)
+void width(struct tree *root)  // РћР±С…РѕРґ РґРµСЂРµРІР° РІ С€РёСЂРёРЅСѓ
 {
 	if (!root)
 		return;
@@ -120,9 +115,8 @@ void width(struct tree *root)
 			push(&head, curr->right);
 	}
 }
-struct tree *search_tree(struct tree *root, int key)
+struct tree *search_tree(struct tree *root, int key) // РќР°С…РѕР¶РґРµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РІ РґРµСЂРµРІРµ
 {
-	//if (!root) return root;  /* пустое дерево */
 	while (root) {
 		if (root->info < key)
 		{
@@ -139,19 +133,19 @@ struct tree *search_tree(struct tree *root, int key)
 	return NULL;
 }
 
-struct tree *dtree(struct tree *root, char key)
+struct tree *dtree(struct tree *root, int key) // РЈРґР°Р»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РёР· РґРµСЂРµРІР° (РџРѕ Р·РЅР°С‡РµРЅРёСЋ)
 {
 	struct tree *p, *p2;
 
-	if (!root) return root; /* вершина не найдена */
+	if (!root) return root; /* РІРµСЂС€РёРЅР° РЅРµ РЅР°Р№РґРµРЅР° */
 
-	if (root->info == key) { /* удаление корня */
-							 /* это означает пустое дерево */
+	if (root->info == key) { /* СѓРґР°Р»РµРЅРёРµ РєРѕСЂРЅСЏ */
+							 /* СЌС‚Рѕ РѕР·РЅР°С‡Р°РµС‚ РїСѓСЃС‚РѕРµ РґРµСЂРµРІРѕ */
 		if (root->left == root->right) {
 			free(root);
 			return NULL;
 		}
-		/* или если одно из поддеревьев пустое */
+		/* РёР»Рё РµСЃР»Рё РѕРґРЅРѕ РёР· РїРѕРґРґРµСЂРµРІСЊРµРІ РїСѓСЃС‚РѕРµ */
 		else if (root->left == NULL) {
 			p = root->right;
 			free(root);
@@ -162,7 +156,7 @@ struct tree *dtree(struct tree *root, char key)
 			free(root);
 			return p;
 		}
-		/* или есть оба поддерева */
+		/* РёР»Рё РµСЃС‚СЊ РѕР±Р° РїРѕРґРґРµСЂРµРІР° */
 		else {
 			p2 = root->right;
 			p = root->right;
@@ -177,23 +171,23 @@ struct tree *dtree(struct tree *root, char key)
 	return root;
 }
 
-void GoToXY(short x, short y)
+void GoToXY(short x, short y) // РџРµСЂРµРІРѕРґ РєСѓСЂСЃРѕСЂР° Рє РєРѕРѕСЂРґРёРЅР°С‚Р°Рј x, y
 {
 	HANDLE StdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD coord = { x, y };
 	SetConsoleCursorPosition(StdOut, coord);
 }
 
-void print(tree * root, short x, short y, short a, char c)
+void print(tree * root, short x, short y, short a, char c)  // Р РёСЃРѕРІР°РЅРёРµ РґРµСЂРµРІР°
 {
 	if (root)
 	{
 		if (a>0 && c != 'k')
 		{
 			if (c == 'l')
-				x -= 10;
+				x -= 15;
 			else
-				x += 10;
+				x += 15;
 		}
 		else
 			if (c != 'k')
@@ -212,106 +206,187 @@ void print(tree * root, short x, short y, short a, char c)
 	}
 }
 
-void LEVEL(tree *koren_d, int &i, int &max_level)//считает количество уровней в деревке моём :)(нужно для вывода деревка,чтобы знать на сколько уровней погружаться рекурсией)
+void LEVEL(tree *koren_d, int &i, int &max_level)//СЃС‡РёС‚Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СѓСЂРѕРІРЅРµР№ РІ РґРµСЂРµРІРµ
 {
-	if (koren_d->left != NULL)
+	if (koren_d)
 	{
-		i++;
-		if (max_level < i)
-			max_level = i;
-		LEVEL(koren_d->left, i, max_level);
-		i--;
-	}
-	if (koren_d->right != NULL)
-	{
-		i++;
-		if (max_level < i)
-			max_level = i;
-		LEVEL(koren_d->right, i, max_level);
-		i--;
+		if (koren_d->left != NULL)
+		{
+			i++;
+			if (max_level < i)
+				max_level = i;
+			LEVEL(koren_d->left, i, max_level);
+			i--;
+		}
+		if (koren_d->right != NULL)
+		{
+			i++;
+			if (max_level < i)
+				max_level = i;
+			LEVEL(koren_d->right, i, max_level);
+			i--;
+		}
 	}
 }
 
-void display_level(tree *koren_d, int &i, int level)//выводит уровень № level у деревка :)
+void display_level(tree *koren_d, int &i, int level)  // РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РІСЃРµС… СЌР»РµРјРµРЅС‚РѕРІ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СѓСЂРѕРІРЅСЏ
 {
-	if (i == level)
-		printf("%d ", koren_d->info);
-	if (koren_d->left != NULL)
+	if (koren_d)
 	{
-		i++;
-		display_level(koren_d->left, i, level);
-		i--;
-	}
-	if (koren_d->right != NULL)
-	{
-		i++;
-		display_level(koren_d->right, i, level);
-		i--;
+		if (i == level)
+			printf("%d ", koren_d->info);
+		if (koren_d->left != NULL)
+		{
+			i++;
+			display_level(koren_d->left, i, level);
+			i--;
+		}
+		if (koren_d->right != NULL)
+		{
+			i++;
+			display_level(koren_d->right, i, level);
+			i--;
+		}
 	}
 }
 
-void display_all(tree *koren)
+void display_all(tree *koren)  // РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РІСЃРµРіРѕ РґРµСЂРµРІР° РїРѕ СѓСЂРѕРІРЅСЏРј
 {
-	int i = 0;//нужна для сквозной нумерации уровня в рекурсиях.(по крайней мере моя башка не придумала ничего лучше этого костыля)
+	int i = 0;//РЅСѓР¶РЅР° РґР»СЏ СЃРєРІРѕР·РЅРѕР№ РЅСѓРјРµСЂР°С†РёРё СѓСЂРѕРІРЅСЏ РІ СЂРµРєСѓСЂСЃРёСЏС….
 	int max_level = 0;
-	LEVEL(koren, i, max_level); //---узнаю максимальный уровень дерева
-	for (int level = 0; level <= max_level; level++) //--цикл поочереди выводит каждый уровень девера, начиная с корняж
+	LEVEL(koren, i, max_level); //---СѓР·РЅР°СЋ РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРІРµРЅСЊ РґРµСЂРµРІР°
+	for (int level = 0; level <= max_level; level++) //--С†РёРєР» РїРѕРѕС‡РµСЂРµРґРё РІС‹РІРѕРґРёС‚ РєР°Р¶РґС‹Р№ СѓСЂРѕРІРµРЅСЊ РґРµРІРµСЂР°, РЅР°С‡РёРЅР°СЏ СЃ РєРѕСЂРЅСЏ
 	{
 		if (level == 0)
-			printf("[ Корень ] : ");
+			printf("[ РљРѕСЂРµРЅСЊ ] : ");
 		else
-			printf("[%d уровень] : ", level);
-		display_level(koren, i, level);//--функция вывода 1 уровня  дерева  
+			printf("[%d СѓСЂРѕРІРµРЅСЊ] : ", level);
+		display_level(koren, i, level);//--С„СѓРЅРєС†РёСЏ РІС‹РІРѕРґР° 1 СѓСЂРѕРІРЅСЏ  РґРµСЂРµРІР°  
 		printf("\n");
 	}
 }
 
+struct tree *deletelement(struct tree *root, int key) // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РІСЃРµРіРѕ РґРµСЂРµРІР°
+{
+	if (!root) return root;
+	if (root->info == key)
+	{
+		free(root);
+		return NULL;
+	}
+	if (root->info < key) root->right = deletelement(root->right, key);
+	else root->left = deletelement(root->left, key);
+	return root;
+}
+
+void delalltree(struct tree *root) // РЈРґР°Р»РµРЅРёРµ РІСЃРµРіРѕ РґРµСЂРµРІР°
+{
+	if (!root) return;
+	delalltree(root->left);
+	delalltree(root->right);
+	root = deletelement(root, root->info);
+}
+
+int listnumber(struct tree *root, int &i, int &p, int level) //РќР°С…РѕР¶РґРµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° Р»РёСЃС‚РѕРІ РЅР° n-РѕРј СѓСЂРѕРІРЅРµ
+{
+	if (root)
+	{
+		if (i == level)
+		{
+			if (root->left == root->right)
+			p++;
+		}
+		if (root->left != NULL)
+		{
+			i++;
+			listnumber(root->left, i, p, level);
+			i--;
+		}
+		if (root->right != NULL)
+		{
+			i++;
+			listnumber(root->right, i, p, level);
+			i--;
+		}
+	}
+	return p;
+}
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	int s, N, kol;
-	system("mode con cols=75 lines=50");
-	root = NULL;  /* инициализация корня дерева */
+	int s, N, kol, l, f = 0, p = 0;
+	system("mode con cols=125 lines=100");
+	root = NULL;
 	do
 	{
-		printf("Выберите опцию: ");
+		printf("1 - Р”РѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ РІ РґРµСЂРµРІРѕ\n");
+		printf("2 - Р’С‹РІРѕРґ РґРµСЂРµРІР° РІ РіР»СѓР±РёРЅСѓ\n");
+		printf("3 - Р’С‹РІРѕРґ РґРµСЂРµРІР° РІ С€РёСЂРёРЅСѓ\n");
+		printf("4 - Р’С‹РІРѕРґ РґРµСЂРµРІР° РїРѕ СѓСЂРѕРІРЅСЏРј\n");
+		printf("5 - РќР°СЂРёСЃРѕРІР°С‚СЊ РґРµСЂРµРІРѕ\n");
+		printf("6 - РЈРґР°Р»РёС‚СЊ СЌР»РµРјРµРЅС‚ РёР· РґРµСЂРµРІР°\n");
+		printf("7 - РќР°Р№С‚Рё РєРѕР»-РІРѕ Р»РёСЃС‚СЊРµРІ РЅР° n-РѕРј СѓСЂРѕРІРЅРµ\n");
+		printf("8 - РЈРґР°Р»РёС‚СЊ РІСЃС‘ РґРµСЂРµРІРѕ Рё РІС‹Р№С‚Рё РёР· РїСЂРѕРіСЂР°РјРјС‹\n");
+		printf("Р’С‹Р±РµСЂРёС‚Рµ РѕРїС†РёСЋ: ");
 		scanf("%i", &N);
-		switch(N)
+		switch (N)
 		{
 		case 1:
-			printf("Сколько элементов вы хотите добавить? ");
+			printf("РЎРєРѕР»СЊРєРѕ СЌР»РµРјРµРЅС‚РѕРІ РІС‹ С…РѕС‚РёС‚Рµ РґРѕР±Р°РІРёС‚СЊ? ");
 			scanf("%i", &kol);
 			for (int i = 0; i < kol; i++)
 			{
-				printf("Введите значение: ");
-				scanf_s("%i", &s);
+				printf("Р’РІРµРґРёС‚Рµ Р·РЅР°С‡РµРЅРёРµ: ");
+				scanf("%i", &s);
 				root = stree(root, root, s);
 			}
 			break;
 		case 2:
 			system("cls");
-			printf("Дерево в глубину:");
+			printf("Р”РµСЂРµРІРѕ РІ РіР»СѓР±РёРЅСѓ:");
 			deep(root);
-			printf("\n");
+			printf("\n\n");
 			break;
 		case 3:
 			system("cls");
-			printf("Дерево в ширину:");
+			printf("Р”РµСЂРµРІРѕ РІ С€РёСЂРёРЅСѓ:");
 			width(root);
-			printf("\n");
+			printf("\n\n");
 			break;
 		case 4:
 			system("cls");
-			printf("Дерево по уровням:");
+			printf("Р”РµСЂРµРІРѕ РїРѕ СѓСЂРѕРІРЅСЏРј:");
 			display_all(root);
+			printf("\n\n");
 			break;
 		case 5:
 			system("cls");
 			print(root, 31, 2, 2, 'k');
 			GoToXY(0, 0);
+			system("pause");
+			system("cls");
 			break;
+		case 6:
+			printf("Р’РІРµРґРёС‚Рµ Р·РЅР°С‡РµРЅРёРµ СЌР»РµРјРµРЅС‚Р°, РєРѕС‚РѕСЂС‹Р№ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ:");
+			scanf("%i", &l);
+			root = dtree(root, l);
+			break;
+		case 7:
+			system("cls");
+			int m;
+			printf("Р’РІРµРґРёС‚Рµ СѓСЂРѕРІРµРЅСЊ: ");
+			scanf("%i", &m);
+			printf("%i\n\n", listnumber(root, f, p, m));
+			p = 0;
+			break;
+		case 8:
+			system("cls");
+			delalltree(root);
+			break;
+		default:
+			printf("РќРµС‚ С‚Р°РєРѕР№ РѕРїС†РёРё!\n");
 		}
-	}while(N!=6);
+	}while(N!=8);
 	return 0;
 }
