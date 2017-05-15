@@ -312,7 +312,7 @@ int listnumber(struct tree *root, int &i, int &p, int level) //Нахожден�
 	return p;
 }
 
-int summa(struct tree *root, int &i, int &sum, int k) //Нахождение количества листов на n-ом уровне
+int summa(struct tree *root, int &i, int &sum, int k) //Нахождение суммы не листов на n-ом уровне
 {
 	if (root)
 	{
