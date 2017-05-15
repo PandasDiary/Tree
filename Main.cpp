@@ -312,10 +312,36 @@ int listnumber(struct tree *root, int &i, int &p, int level) //Нахожден�
 	return p;
 }
 
+int summa(struct tree *root, int &i, int &sum, int k) //Нахождение количества листов на n-ом уровне
+{
+	if (root)
+	{
+		if (i == k)
+		{
+			if (root->left != root->right)
+				sum = sum + root->info;
+		}
+		if (root->left != NULL)
+		{
+			i++;
+			summa(root->left, i, sum, k);
+			i--;
+		}
+		if (root->right != NULL)
+		{
+			i++;
+			summa(root->right, i, sum, k);
+			i--;
+		}
+	}
+	return sum;
+}
+
+
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	int s, N, kol, l, f = 0, p = 0;
+	int s, N, kol, l, f = 0, p = 0, i = 0, sum = 0;
 	system("mode con cols=125 lines=100");
 	root = NULL;
 	do
@@ -327,7 +353,8 @@ int main()
 		printf("5 - Нарисовать дерево\n");
 		printf("6 - Удалить элемент из дерева\n");
 		printf("7 - Найти кол-во листьев на n-ом уровне\n");
-		printf("8 - Удалить всё дерево и выйти из программы\n");
+		printf("8 - Найти сумму не листьев на n-ом уровне\n");
+		printf("9 - Удалить всё дерево и выйти из программы\n");
 		printf("Выберите опцию: ");
 		scanf("%i", &N);
 		switch (N)
@@ -382,11 +409,19 @@ int main()
 			break;
 		case 8:
 			system("cls");
+			int k;
+			printf("Введите уровень: ");
+			scanf("%i", &k);
+			printf("%i\n\n", summa(root, i, sum, k));
+			sum = 0;
+			break;
+		case 9:
+			system("cls");
 			delalltree(root);
 			break;
 		default:
 			printf("Нет такой опции!\n");
 		}
-	}while(N!=8);
+	}while(N!=9);
 	return 0;
 }
